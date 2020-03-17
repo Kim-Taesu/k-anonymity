@@ -1,8 +1,8 @@
 object Config {
-  val kValue: Int = 5
+  val kValue: Int = 500
 
-  val taxonomyDataPth: String = "???"
+  val taxonomyDataPth: String = "data/raw/taxonomy.txt"
 
-  val rawDataPath: String = ""
+  val rawDataPath: String = "data/raw/sample.csv"
 
 }

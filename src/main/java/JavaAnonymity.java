@@ -23,7 +23,10 @@ public class JavaAnonymity {
 
         // 분류 트리 경우의 수 계산
         int[] tmp = new int[taxonomyInfo.size()];
-        findTaxonomyCase(tmp, 0);
+        File taxonomyCaseFile = new File(JavaConfig.TAXONOMY_CASES_PATH);
+        BufferedWriter bw = new BufferedWriter(new FileWriter(taxonomyCaseFile));
+        findTaxonomyCase(tmp, 0, bw);
+        bw.close();
 
         // 원본 데이터 read
         readData();
@@ -143,7 +146,7 @@ public class JavaAnonymity {
     private static void setUpTaxonomy() throws IOException {
         final BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(JavaConfig.TAXONOMY_INFO_PATH)));
         String line;
-        Integer id = 0;
+        int id = 0;
         while ((line = bufferedReader.readLine()) != null) {
             final String[] split = line.split(JavaConfig.DELIMITER);
             final String quasiName = split[0];
@@ -167,19 +170,20 @@ public class JavaAnonymity {
         bufferedReader.close();
     }
 
-    private static void findTaxonomyCase(int[] tmp, int index) {
+    private static void findTaxonomyCase(int[] tmp, int index, BufferedWriter bw) throws IOException {
         if (index == tmp.length) {
             StringBuilder result = new StringBuilder();
             for (int i : tmp) {
                 result.append(i);
             }
+            bw.write(result.toString() + "\n");
             taxonomyCases.add(result.toString());
             return;
         }
 
         for (int i = 0; i <= taxonomyInfo.get(index).getMaxLevel(); i++) {
             tmp[index] += i;
-            findTaxonomyCase(tmp, index + 1);
+            findTaxonomyCase(tmp, index + 1, bw);
             tmp[index] -= i;
         }
     }
